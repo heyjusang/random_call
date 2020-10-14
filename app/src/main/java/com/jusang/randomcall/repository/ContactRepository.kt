@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.ContactsContract
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.jusang.randomcall.R
 import com.jusang.randomcall.model.ContactModel
 
 class ContactRepository(var context: Context) {
@@ -27,7 +28,7 @@ class ContactRepository(var context: Context) {
                 var name: String = cursor.getString(1);
                 var phone: String = cursor.getString(2);
 
-                contacts.add(ContactModel(id, name, phone))
+                contacts.add(ContactModel(id, name, phone, R.drawable.profile_sample))
             }
 
             cursor.close()
