@@ -15,9 +15,23 @@ class MainViewModel(
     private val contactRepository: ContactRepository
 ): ViewModel() {
     private var mContactList: MutableLiveData<List<ContactModel>> = MutableLiveData()
+    private var mRandomContact: MutableLiveData<ContactModel> = MutableLiveData()
 
     fun getContactList(): LiveData<List<ContactModel>> {
         mContactList.value = contactRepository.getContactList()
         return mContactList
+    }
+
+    fun getRandomContact(): LiveData<ContactModel> {
+        return mRandomContact
+    }
+
+    fun selectRandomContact() {
+        val length = mContactList.value?.size ?: 0
+
+        if (length > 0) {
+            val index = (0 until length).random()
+            mRandomContact.value = mContactList.value?.get(index)
+        }
     }
 }

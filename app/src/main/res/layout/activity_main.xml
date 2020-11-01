@@ -4,6 +4,9 @@
         <variable
             name="viewModel"
             type="com.jusang.randomcall.viewmodel.MainViewModel" />
+        <variable
+            name="activity"
+            type="com.jusang.randomcall.view.MainActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,11 +17,20 @@
         android:layout_height="match_parent"
         tools:context=".view.MainActivity">
 
+        <com.jusang.randomcall.view.SelectedContactView
+            android:id="@+id/selected_contact_layout"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            bind_selected_contact="@{viewModel.randomContact}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btn_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selected_contact_layout"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">
             <Button
@@ -30,10 +42,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.5"/>
             <Button
-                android:id="@+id/call_button"
+                android:id="@+id/select_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="CALL"
+                android:text="SELECT"
+                android:onClick="@{activity::selectButtonClicked}"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.5"/>

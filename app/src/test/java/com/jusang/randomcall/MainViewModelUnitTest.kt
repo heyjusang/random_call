@@ -15,10 +15,12 @@ class MainViewModelUnitTest {
     val rule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var emptyViewModel: MainViewModel
 
     @Before
     fun setup() {
         viewModel = MainViewModel(TestContactRepository())
+        emptyViewModel = MainViewModel(TestEmptyContactRepository())
     }
 
     @Test
@@ -30,6 +32,38 @@ class MainViewModelUnitTest {
             Assert.assertEquals("name$i", c.name)
             Assert.assertEquals("010-1234-432$i", c.phone)
             i++
+        }
+    }
+
+    @Test
+    fun getRandomContact() {
+        var contactList: LiveData<List<ContactModel>> = viewModel.getContactList()
+
+        viewModel.selectRandomContact()
+        var contact: LiveData<ContactModel> = viewModel.getRandomContact()
+
+        Assert.assertTrue(contactList.value!!.contains(contact.value))
+    }
+
+    @Test
+    fun getContactListFromEmpty() {
+        var contactList: LiveData<List<ContactModel>> = emptyViewModel.getContactList()
+
+        Assert.assertEquals(0, contactList.value!!.size)
+    }
+
+    @Test
+    fun getRandomContactFromEmpty() {
+        emptyViewModel.selectRandomContact()
+
+        var contact: LiveData<ContactModel> = emptyViewModel.getRandomContact()
+
+        Assert.assertNull(contact.value)
+    }
+
+    class TestEmptyContactRepository: ContactRepository() {
+        override fun getContactList(): List<ContactModel> {
+            return arrayListOf()
         }
     }
 

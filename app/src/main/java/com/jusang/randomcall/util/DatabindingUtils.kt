@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jusang.randomcall.model.ContactModel
+import com.jusang.randomcall.view.SelectedContactView
 import com.jusang.randomcall.view.adapter.ContactListAdapter
 
 object DatabindingUtils {
@@ -23,6 +24,12 @@ object DatabindingUtils {
 
         (recyclerView.adapter as ContactListAdapter).setContactList(items)
         recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    @BindingAdapter("bind_selected_contact")
+    @JvmStatic
+    fun bindSelectedContact(selectedView: SelectedContactView, item:LiveData<ContactModel>) {
+        selectedView.binding.model = item.value
     }
 
     @BindingAdapter("bind_image")
