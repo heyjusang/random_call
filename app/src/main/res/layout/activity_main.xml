@@ -21,7 +21,7 @@
             android:id="@+id/selected_contact_layout"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            bind_selected_contact="@{viewModel.randomContact}"
+            app:contactModel="@{viewModel.randomContact}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />

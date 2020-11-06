@@ -18,8 +18,11 @@ class MainViewModel(
     private var mRandomContact: MutableLiveData<ContactModel> = MutableLiveData()
 
     fun getContactList(): LiveData<List<ContactModel>> {
-        mContactList.value = contactRepository.getContactList()
         return mContactList
+    }
+
+    fun updateContactList() {
+        mContactList.value = contactRepository.getContactList()
     }
 
     fun getRandomContact(): LiveData<ContactModel> {

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
@@ -25,9 +26,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = MainViewModel(LocalContactRepository(this))
         binding.activity = this
+        binding.lifecycleOwner = this
 
         initContacts()
     }
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             else {
-                observeViewModel()
+                binding.viewModel?.updateContactList()
             }
         }
         // TODO case : VERSION < M
@@ -53,19 +56,8 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         if (requestCode == Constants.PERMISSION_REQUEST_READ_CONTACTS && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            observeViewModel()
+            binding.viewModel?.updateContactList()
         }
-    }
-
-    private fun observeViewModel() {
-        binding.viewModel?.getContactList()?.observe(this, Observer {
-            contact_recycler_view.adapter?.notifyDataSetChanged()
-        })
-
-        binding.viewModel?.getRandomContact()?.observe(this, Observer {
-            // TODO : remove observer using viewmodel in SelectContactView
-            DatabindingUtils.bindSelectedContact(selected_contact_layout, (binding.viewModel as MainViewModel).getRandomContact())
-        })
     }
 
     fun selectButtonClicked(view: View) {

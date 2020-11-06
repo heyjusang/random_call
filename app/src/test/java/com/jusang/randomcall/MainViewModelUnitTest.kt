@@ -21,6 +21,9 @@ class MainViewModelUnitTest {
     fun setup() {
         viewModel = MainViewModel(TestContactRepository())
         emptyViewModel = MainViewModel(TestEmptyContactRepository())
+
+        viewModel.updateContactList()
+        emptyViewModel.updateContactList()
     }
 
     @Test

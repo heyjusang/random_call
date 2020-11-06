@@ -26,12 +26,6 @@ object DatabindingUtils {
         recyclerView.adapter?.notifyDataSetChanged()
     }
 
-    @BindingAdapter("bind_selected_contact")
-    @JvmStatic
-    fun bindSelectedContact(selectedView: SelectedContactView, item:LiveData<ContactModel>) {
-        selectedView.binding.model = item.value
-    }
-
     @BindingAdapter("bind_image")
     @JvmStatic
     fun bindImage(imageView: ImageView, resId: Int) {
