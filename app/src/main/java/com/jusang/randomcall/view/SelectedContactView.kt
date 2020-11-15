@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.jusang.randomcall.R
+import com.jusang.randomcall.databinding.ItemContactBinding
 import com.jusang.randomcall.databinding.ViewSelectedContactBinding
 import com.jusang.randomcall.model.ContactModel
 

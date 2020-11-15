@@ -17,12 +17,24 @@
         android:layout_height="match_parent"
         tools:context=".view.MainActivity">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginBottom="15dp"
+            android:indeterminate="true"
+            android:progressTintMode="add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.jusang.randomcall.view.SelectedContactView
             android:id="@+id/selected_contact_layout"
             android:layout_width="0dp"
             android:layout_height="60dp"
             app:contactModel="@{viewModel.randomContact}"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -56,7 +68,6 @@
             android:id="@+id/contact_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            bind_contact_list="@{viewModel.contactList}"
             app:layout_constraintTop_toBottomOf="@id/btn_container"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

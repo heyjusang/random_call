@@ -1,40 +1,31 @@
 package com.jusang.randomcall.viewmodel
 
-import android.Manifest
-import android.app.Application
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.jusang.randomcall.model.ContactModel
+import com.jusang.randomcall.model.State
 import com.jusang.randomcall.repository.ContactRepository
-import com.jusang.randomcall.repository.LocalContactRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 
 class MainViewModel(
     private val contactRepository: ContactRepository
-): ViewModel() {
-    private var mContactList: MutableLiveData<List<ContactModel>> = MutableLiveData()
-    private var mRandomContact: MutableLiveData<ContactModel> = MutableLiveData()
+): BaseViewModel<List<ContactModel>>() {
+    var randomContact: MutableLiveData<ContactModel> = MutableLiveData()
 
-    fun getContactList(): LiveData<List<ContactModel>> {
-        return mContactList
-    }
+    fun loadContactList() {
+        startLoading()
 
-    fun updateContactList() {
-        mContactList.value = contactRepository.getContactList()
-    }
-
-    fun getRandomContact(): LiveData<ContactModel> {
-        return mRandomContact
+        contactRepository.getContactList()
+            .subscribeOn(Schedulers.io()) // which schedulers?
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(onSuccess = onSuccessHandler, onError = onErrorHandler)
+            .addTo(disposable)
     }
 
     fun selectRandomContact() {
-        val length = mContactList.value?.size ?: 0
-
-        if (length > 0) {
-            val index = (0 until length).random()
-            mRandomContact.value = mContactList.value?.get(index)
-        }
+        // TODO : how to hold loaded contact list ???
     }
 }
