@@ -9,8 +9,11 @@ import android.net.Uri
 import android.os.Build
 import android.provider.ContactsContract
 import android.telephony.PhoneNumberUtils
+import com.jusang.randomcall.App
 import com.jusang.randomcall.R
-import com.jusang.randomcall.model.ContactModel
+import com.jusang.randomcall.database.AppDatabase
+import com.jusang.randomcall.entity.ContactEntity
+import io.reactivex.Completable
 import io.reactivex.Single
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -18,12 +21,28 @@ import kotlin.collections.ArrayList
 
 class LocalContactRepository(private var context: Context): ContactRepository() {
 
-    override fun getContactList(): Single<List<ContactModel>> {
-        return Single.just(getLocalContacts()).delay(2000, TimeUnit.MILLISECONDS);
+    override fun getContactList(): Single<List<ContactEntity>> {
+        // TODO
+        return Single.just(getDeviceContacts()).delay(2000, TimeUnit.MILLISECONDS)
     }
 
-    private fun getLocalContacts(): List<ContactModel> {
-        var contacts: ArrayList<ContactModel> = arrayListOf()
+    override fun getLocalContactList(): Single<List<ContactEntity>> {
+        // TODO
+        return App.db?.contactDao()?.getAll()!!.delay(1000, TimeUnit.MILLISECONDS)
+    }
+
+    override fun insertContactList(contactEntities: List<ContactEntity>): Completable {
+        return App.db?.contactDao()?.bulkInsert(contactEntities)!!.delay(2000, TimeUnit.MILLISECONDS)
+    }
+
+    private fun getLocalContacts() {
+
+        var db: AppDatabase? = App.db
+        db?.contactDao()?.getAll()
+    }
+
+    private fun getDeviceContacts(): List<ContactEntity> {
+        var contacts: ArrayList<ContactEntity> = arrayListOf()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             return contacts
@@ -39,13 +58,13 @@ class LocalContactRepository(private var context: Context): ContactRepository() 
 
         if (cursor != null) {
             while(cursor.moveToNext()) {
-                var id: String = cursor.getString(0);
+                var id: Int = cursor.getInt(0);
                 var name: String = cursor.getString(1);
                 var phone: String = cursor.getString(2);
                 var formattedPhone: String = PhoneNumberUtils.formatNumber(phone, Locale.getDefault().country)
 
                 // TODO : photo uri
-                contacts.add(ContactModel(id, name, formattedPhone, R.drawable.profile_sample))
+                contacts.add(ContactEntity(id, name, formattedPhone, R.drawable.profile_sample))
             }
 
             cursor.close()

@@ -4,14 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jusang.randomcall.databinding.ItemContactBinding
-import com.jusang.randomcall.model.ContactModel
+import com.jusang.randomcall.entity.ContactEntity
 
 class ContactListAdapter () : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-    private var contactList = listOf<ContactModel>()
+    private var contactList = mutableListOf<ContactEntity>()
 
-    fun setContactList(contactList: List<ContactModel>) {
-        this.contactList = contactList
+    fun add(contactList: List<ContactEntity>) {
+        this.contactList.addAll(contactList)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -35,7 +36,7 @@ class ContactListAdapter () : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
 class ContactViewHolder(private val binding: ItemContactBinding): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(contactModel : ContactModel) {
+    fun bind(contactModel : ContactEntity) {
         binding.model = contactModel
     }
 }

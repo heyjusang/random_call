@@ -1,9 +1,7 @@
 package com.jusang.randomcall.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.jusang.randomcall.model.ContactModel
-import com.jusang.randomcall.model.State
+import com.jusang.randomcall.entity.ContactEntity
 import com.jusang.randomcall.repository.ContactRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -12,17 +10,21 @@ import io.reactivex.schedulers.Schedulers
 
 class MainViewModel(
     private val contactRepository: ContactRepository
-): BaseViewModel<List<ContactModel>>() {
-    var randomContact: MutableLiveData<ContactModel> = MutableLiveData()
+): BaseViewModel<List<ContactEntity>>() {
+    var randomContact: MutableLiveData<ContactEntity> = MutableLiveData()
 
     fun loadContactList() {
         startLoading()
 
         contactRepository.getContactList()
-            .subscribeOn(Schedulers.io()) // which schedulers?
+            .mergeWith(contactRepository.getLocalContactList())
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onSuccess = onSuccessHandler, onError = onErrorHandler)
-            .addTo(disposable)
+            .subscribeBy(
+                onNext = onDataLoadHandler,
+                onError = onErrorHandler,
+                onComplete = onCompleteHandler
+            ).addTo(disposable)
     }
 
     fun selectRandomContact() {

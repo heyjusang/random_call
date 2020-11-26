@@ -2,14 +2,12 @@ package com.jusang.randomcall.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.jusang.randomcall.R
-import com.jusang.randomcall.databinding.ItemContactBinding
 import com.jusang.randomcall.databinding.ViewSelectedContactBinding
-import com.jusang.randomcall.model.ContactModel
+import com.jusang.randomcall.entity.ContactEntity
 
 class SelectedContactView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -21,7 +19,7 @@ class SelectedContactView @JvmOverloads constructor(
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_selected_contact, this, true)
     }
 
-    fun setContactModel(contact: ContactModel?) {
+    fun setContactModel(contact: ContactEntity?) {
         binding.model = contact
     }
 }

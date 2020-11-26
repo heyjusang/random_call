@@ -4,22 +4,20 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jusang.randomcall.R
 import com.jusang.randomcall.databinding.ActivityMainBinding
-import com.jusang.randomcall.model.ContactModel
+import com.jusang.randomcall.entity.ContactEntity
 import com.jusang.randomcall.repository.LocalContactRepository
 import com.jusang.randomcall.util.Constants
 import com.jusang.randomcall.view.adapter.ContactListAdapter
 import com.jusang.randomcall.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseActivity<List<ContactModel>>() {
+class MainActivity : BaseActivity<List<ContactEntity>>() {
     lateinit var binding : ActivityMainBinding
     lateinit var adapter: ContactListAdapter
 
@@ -72,9 +70,8 @@ class MainActivity : BaseActivity<List<ContactModel>>() {
         progressBar.visibility = View.VISIBLE
     }
 
-    override fun onDataLoaded(data: List<ContactModel>) {
-        adapter.setContactList(data)
-        adapter.notifyDataSetChanged()
+    override fun onDataLoaded(data: List<ContactEntity>) {
+        adapter.add(data)
     }
 
     override fun onTaskComplete() {

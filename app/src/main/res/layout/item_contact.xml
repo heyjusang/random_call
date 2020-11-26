@@ -4,7 +4,7 @@
         <!-- model 들어가도 되나?? -->
         <variable
             name="model"
-            type="com.jusang.randomcall.model.ContactModel" />
+            type="com.jusang.randomcall.entity.ContactEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
