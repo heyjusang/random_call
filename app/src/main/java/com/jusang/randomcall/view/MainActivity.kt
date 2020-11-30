@@ -15,8 +15,10 @@ import com.jusang.randomcall.repository.LocalContactRepository
 import com.jusang.randomcall.util.Constants
 import com.jusang.randomcall.view.adapter.ContactListAdapter
 import com.jusang.randomcall.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<List<ContactEntity>>() {
     lateinit var binding : ActivityMainBinding
     lateinit var adapter: ContactListAdapter

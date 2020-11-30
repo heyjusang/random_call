@@ -3,7 +3,9 @@ package com.jusang.randomcall
 import android.app.Application
 import androidx.room.Room
 import com.jusang.randomcall.database.AppDatabase
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App : Application() {
     companion object {
         var db: AppDatabase? = null

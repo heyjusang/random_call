@@ -11,15 +11,18 @@ import android.provider.ContactsContract
 import android.telephony.PhoneNumberUtils
 import com.jusang.randomcall.App
 import com.jusang.randomcall.R
-import com.jusang.randomcall.database.AppDatabase
 import com.jusang.randomcall.entity.ContactEntity
+import dagger.hilt.android.qualifiers.ActivityContext
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class LocalContactRepository(private var context: Context): ContactRepository() {
+class LocalContactRepository @Inject constructor (
+    @ActivityContext val context: Context
+): ContactRepository {
 
     override fun getContactList(): Single<List<ContactEntity>> {
         // TODO
@@ -33,12 +36,6 @@ class LocalContactRepository(private var context: Context): ContactRepository() 
 
     override fun insertContactList(contactEntities: List<ContactEntity>): Completable {
         return App.db?.contactDao()?.bulkInsert(contactEntities)!!.delay(2000, TimeUnit.MILLISECONDS)
-    }
-
-    private fun getLocalContacts() {
-
-        var db: AppDatabase? = App.db
-        db?.contactDao()?.getAll()
     }
 
     private fun getDeviceContacts(): List<ContactEntity> {

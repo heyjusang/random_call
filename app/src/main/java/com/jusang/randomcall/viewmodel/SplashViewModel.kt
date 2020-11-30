@@ -1,5 +1,6 @@
 package com.jusang.randomcall.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import com.jusang.randomcall.R
 import com.jusang.randomcall.entity.ContactEntity
 import com.jusang.randomcall.repository.ContactRepository
@@ -8,7 +9,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class SplashViewModel(
+class SplashViewModel @ViewModelInject constructor(
     private val contactRepository: ContactRepository
 ): BaseViewModel<Nothing>() {
 
