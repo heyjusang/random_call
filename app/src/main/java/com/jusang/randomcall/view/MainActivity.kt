@@ -6,36 +6,33 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.jusang.randomcall.R
 import com.jusang.randomcall.databinding.ActivityMainBinding
 import com.jusang.randomcall.entity.ContactEntity
-import com.jusang.randomcall.repository.LocalContactRepository
 import com.jusang.randomcall.util.Constants
 import com.jusang.randomcall.view.adapter.ContactListAdapter
 import com.jusang.randomcall.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<List<ContactEntity>>() {
-    lateinit var binding : ActivityMainBinding
-    lateinit var adapter: ContactListAdapter
+    private val viewModel: MainViewModel by viewModels()
+    @Inject lateinit var adapter: ContactListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.viewModel = MainViewModel(LocalContactRepository(this))
+        var binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        binding.viewModel = viewModel
         binding.activity = this
-        binding.viewModel?.result?.observe(this, this)
-        // TODO : multiple viewmodel data
 
-        adapter = ContactListAdapter()
-        contact_recycler_view.layoutManager = LinearLayoutManager(this)
         contact_recycler_view.adapter = adapter
 
+        viewModel.result.observe(this, this)
         initContacts()
     }
 
@@ -48,7 +45,7 @@ class MainActivity : BaseActivity<List<ContactEntity>>() {
                 )
             }
             else {
-                binding.viewModel?.loadContactList()
+                viewModel.loadContactList()
             }
         }
         // TODO case : VERSION < M
@@ -60,12 +57,12 @@ class MainActivity : BaseActivity<List<ContactEntity>>() {
         grantResults: IntArray
     ) {
         if (requestCode == Constants.PERMISSION_REQUEST_READ_CONTACTS && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            binding.viewModel?.loadContactList()
+            viewModel.loadContactList()
         }
     }
 
     fun selectButtonClicked(view: View) {
-        binding.viewModel?.selectRandomContact()
+        viewModel.selectRandomContact()
     }
 
     override fun onTaskLoading() {
@@ -74,11 +71,10 @@ class MainActivity : BaseActivity<List<ContactEntity>>() {
 
     override fun onDataLoaded(data: List<ContactEntity>) {
         adapter.add(data)
-    }
-
-    override fun onTaskComplete() {
         progressBar.visibility = View.GONE
     }
+
+    override fun onTaskComplete() {}
 
     override fun onError(message: String) {
         progressBar.visibility = View.GONE

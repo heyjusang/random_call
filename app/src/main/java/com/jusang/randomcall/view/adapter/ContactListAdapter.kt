@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jusang.randomcall.databinding.ItemContactBinding
 import com.jusang.randomcall.entity.ContactEntity
+import javax.inject.Inject
 
-class ContactListAdapter () : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ContactListAdapter @Inject constructor()
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private var contactList = mutableListOf<ContactEntity>()
 
